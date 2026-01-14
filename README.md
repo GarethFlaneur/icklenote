@@ -17,5 +17,17 @@ You can also use RTF files, but this is not very tested so there may be problems
 
 To be expanded. 
 
+## Screenshots 
+
+### 1) Document Tab
+
 ![image alt](https://github.com/GarethFlaneur/Icklenote/blob/bb21c6244e83702fb8c91a573f2954db8755b3ca/Screenshots/Document%20Tab.JPG)
+
+### 2) Search Results Tab
+
+![image alt](https://github.com/GarethFlaneur/Icklenote/blob/962765f78487f3236a6538492bf3813f0e6dc3ac/Screenshots/Search%20Tab.JPG)
+
+### 3) Settings Tab
+
+![image alt](https://github.com/GarethFlaneur/Icklenote/blob/962765f78487f3236a6538492bf3813f0e6dc3ac/Screenshots/Settings%20Tab.JPG)
 
