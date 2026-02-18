@@ -36,6 +36,7 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    ChangeFont1: TButton;
     FindButton:       TButton;
     HighlightText:    TMenuItem;
     MenuItem1:        TMenuItem;
@@ -46,6 +47,7 @@ type
     MainMenu1:        TMainMenu;
     FileMenu:         TMenuItem;
     CutText:          TMenuItem;
+    FileListTextFontLabel: TLabel;
     Rescan:           TButton;
     Save:             TMenuItem;
     EditCopy:         TMenuItem;
@@ -79,6 +81,7 @@ type
     HelpTab:          TTabSheet;
     Splitter1:        TSplitter;
 
+    procedure ChangeFont1Click(Sender: TObject);
     procedure ChangeFontClick(Sender: TObject);
     procedure CopyTextClick(Sender: TObject);
     procedure CutTextClick(Sender: TObject);
@@ -147,9 +150,10 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
      LoadIni();
 
-     ChangeFont.Caption := InttoStr(Document.font.Size) + 'pt  '+Document.font.Name;
+     ChangeFont.Caption  := InttoStr(Document.font.Size) + 'pt  '+Document.font.Name;
+     ChangeFont1.Caption := InttoStr(FileList.font.Size) + 'pt  '+FileList.font.Name;
 
-     Form1.Caption      :=  'IckleNote [v0.692 / 2025-12-13 / Lazarus 4.2] Path: ' + Application.Location;
+     Form1.Caption      :=  'IckleNote [v0.693 / 2026-02-18 / Lazarus 4.2] Path: ' + Application.Location;
 
      LoadFileList();
 
@@ -309,11 +313,17 @@ begin
      IniFile.WriteBool('Options','AutoSave',AutoSaveCheckBox.Checked);
      IniFile.WriteBool('Options','WordWrap',WordWrapCheckBox.Checked);
 
-     IniFile.WriteString('Font','Name', Document.Font.Name);
-     IniFile.WriteInteger('Font','CharSet', Document.Font.CharSet);
-     IniFile.WriteInteger('Font','Color', Document.Font.Color);
-     IniFile.WriteInteger('Font','Size', Document.Font.Size);
-     IniFile.WriteInteger('Font','Style', Integer(Document.Font.Style));
+     IniFile.WriteString('PlainTextFont','Name', Document.Font.Name);
+     IniFile.WriteInteger('PlainTextFont','CharSet', Document.Font.CharSet);
+     IniFile.WriteInteger('PlainTextFont','Color', Document.Font.Color);
+     IniFile.WriteInteger('PlainTextFont','Size', Document.Font.Size);
+     IniFile.WriteInteger('PlainTextFont','Style', Integer(Document.Font.Style));
+
+     IniFile.WriteString('FileListFont','Name', FileList.Font.Name);
+     IniFile.WriteInteger('FileListFont','CharSet', FileList.Font.CharSet);
+     IniFile.WriteInteger('FileListFont','Color', FileList.Font.Color);
+     IniFile.WriteInteger('FileListFont','Size', FileList.Font.Size);
+     IniFile.WriteInteger('FileListFont','Style', Integer(FileList.Font.Style));
 
      IniFile.WriteString('Search','SearchMask', '*.txt;*.rtf;*.asc;*.md;*.ini;*.pas' );
   Try
@@ -650,11 +660,18 @@ begin
     WordWrapCheckBox.Checked := IniFile.ReadBool('Options','WordWrap',True);
 
 
-    Document.Font.Name :=    IniFile.ReadString('Font','Name','Courier New');
-    Document.Font.CharSet := IniFile.ReadInteger('Font','CharSet',0);
-    Document.Font.Color :=   IniFile.ReadInteger('Font','Color',0);
-    Document.Font.Size :=    IniFile.ReadInteger('Font','Size',12);
-    Document.Font.Style :=   TFontStyles(IniFile.ReadInteger('Font','Style',0));
+    Document.Font.Name :=    IniFile.ReadString('PlainTextFont','Name','Courier New');
+    Document.Font.CharSet := IniFile.ReadInteger('PlainTextFont','CharSet',0);
+    Document.Font.Color :=   IniFile.ReadInteger('PlainTextFont','Color',0);
+    Document.Font.Size :=    IniFile.ReadInteger('PlainTextFont','Size',12);
+    Document.Font.Style :=   TFontStyles(IniFile.ReadInteger('PlainTextFont','Style',0));
+
+    FileList.Font.Name :=    IniFile.ReadString('FileListFont','Name','Courier New');
+    FileList.Font.CharSet := IniFile.ReadInteger('FileListFont','CharSet',0);
+    FileList.Font.Color :=   IniFile.ReadInteger('FileListFont','Color',0);
+    FileList.Font.Size :=    IniFile.ReadInteger('FileListFont','Size',12);
+    FileList.Font.Style :=   TFontStyles(IniFile.ReadInteger('FileListFont','Style',0));
+
 
     SearchMask :=            IniFile.ReadString('Search','SearchMask','*.txt;*.rtf;*.asc;*.md;*.ini;*.pas');
 
@@ -870,10 +887,22 @@ end;
 procedure TForm1.ChangeFontClick(Sender: TObject);
 
 begin
+     fontdialog1.Font := Document.Font;
      if fontdialog1.Execute then
         begin
              Document.Font:=fontdialog1.Font;
              ChangeFont.Caption := InttoStr(Document.font.Size) + 'pt  ' + Document.font.Name;
+        end;
+end;
+//------------------------------------------------------------------------------
+procedure TForm1.ChangeFont1Click(Sender: TObject);
+begin
+     fontdialog1.Font := FileList.Font;
+     if fontdialog1.Execute then
+        begin
+             FileList.Font:=fontdialog1.Font;
+             FileList.ItemHeight := (FileList.Font.Size + 2) * 2 ;
+             ChangeFont1.Caption := InttoStr(FileList.font.Size) + 'pt  ' + FileList.font.Name;
         end;
 end;
 
